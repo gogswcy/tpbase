@@ -1,0 +1,253 @@
+<!--图片裁剪框 start-->
+<div style="display: none" class="tailoring-container">
+    <div class="black-cloth"></div>
+    <div class="tailoring-content">
+        <div class="tailoring-content-one">
+            <label title="上传图片" for="chooseImg" class="l-btn choose-btn">
+                <input type="file" accept="image/jpg,image/jpeg,image/png" name="file" id="chooseImg" class="hidden"
+                    onchange="selectImg(this)">
+                选择图片
+            </label>
+            <div class="close-tailoring" onclick="closeTailor(this)">×</div>
+        </div>
+        <div class="tailoring-content-two">
+            <div class="tailoring-box-parcel">
+                <img id="tailoringImg">
+            </div>
+            <div class="preview-box-parcel">
+                <p>图片预览：</p>
+                <div class="square previewImg"></div>
+                <if condition="$yuan_yulan eq 1">
+                    <div class="circular previewImg"></div>
+                </if>
+            </div>
+        </div>
+        <div class="tailoring-content-three">
+            <button class="l-btn cropper-reset-btn">复位</button>
+            <button class="l-btn cropper-rotate-btn">旋转</button>
+            <button class="l-btn cropper-scaleX-btn">换向</button>
+            <button class="l-btn sureCut" id="sureCut">确定</button>
+        </div>
+    </div>
+</div>
+<!--图片裁剪框 end-->
+<!--引入裁剪图片的插件-->
+<link href="__PUBLIC__/static/uploadimgs/css/cropper.min.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/static/uploadimgs/css/ImgCropping.css?t=4" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__PUBLIC__/static/uploadimgs/js/cropper.min.js?t=8"></script>
+<script>
+    $(function () {
+        try {
+            var no_layer_full = Number("1");
+            if (!no_layer_full) {
+                layer_full();
+            }
+        } catch (e) { }
+    })
+
+    var upload_img = '';
+    var scale = 16 / 9;
+    var data_name_show = '';//传入的name参数名
+
+    //弹出框水平垂直居中
+    (window.onresize = function () {
+        var win_height = $(window).height();
+        var win_width = $(window).width();
+        if (win_width <= 768) {
+            $(".tailoring-content").css({
+                "top": (win_height - $(".tailoring-content").outerHeight()) / 2,
+                "left": 0
+            });
+        } else {
+            $(".tailoring-content").css({
+                "top": (win_height - $(".tailoring-content").outerHeight()) / 2,
+                "left": (win_width - $(".tailoring-content").outerWidth()) / 2
+            });
+        }
+    })();
+
+    //弹出图片裁剪框
+    $(".image_upload,.images_upload").on("click", function () {
+        // $('#tailoringImg').cropper('destroy');
+        $("#chooseImg").val('');
+        upload_img = $(this);
+        //改变name值
+        var data_name = upload_img.attr("img_name");
+        if (data_name) {
+            data_name_show = data_name;
+        }
+        //改变比例
+        scale = upload_img.attr("data_scale");
+        $(".tailoring-container").toggle();
+        if (scale) {
+            $('#tailoringImg').cropper('setAspectRatio', eval(scale));
+        }
+        // $('#tailoringImg').cropper('clear');
+        // $('#tailoringImg').cropper({
+        //     aspectRatio: bili,//默认比例
+        //     preview: '.previewImg',//预览视图
+        //     guides: false,  //裁剪框的虚线(九宫格)
+        //     autoCropArea: 1,  //0-1之间的数值，定义自动剪裁区域的大小，默认0.8
+        //     movable: false, //是否允许移动图片
+        //     dragCrop: true,  //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
+        //     movable: true,  //是否允许移动剪裁框
+        //     resizable: true,  //是否允许改变裁剪框的大小
+        //     zoomable: true,  //是否允许缩放图片大小
+        //     mouseWheelZoom: true,  //是否允许通过鼠标滚轮来缩放图片
+        //     touchDragZoom: true,  //是否允许通过触摸移动来缩放图片
+        //     rotatable: true,  //是否允许旋转图片
+        //     crop: function(e) {
+        //         // 输出结果数据裁剪图像。
+        //     }
+        // });
+    });
+    //图像上传
+    function selectImg(file) {
+        if (!file.files || !file.files[0]) {
+            return;
+        }
+        var reader = new FileReader();
+        reader.readAsDataURL(file.files[0]);
+        reader.onload = function (evt) {
+            var replaceSrc = evt.target.result;
+            //更换cropper的图片
+            $('#tailoringImg').cropper('replace', replaceSrc, false);//默认false，适应高度，不失真
+        }
+    }
+    //cropper图片裁剪
+    $('#tailoringImg').cropper({
+        aspectRatio: scale,//默认比例
+        preview: '.previewImg',//预览视图
+        guides: false,  //裁剪框的虚线(九宫格)
+        autoCropArea: 1,  //0-1之间的数值，定义自动剪裁区域的大小，默认0.8
+        movable: false, //是否允许移动图片
+        dragCrop: true,  //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
+        movable: true,  //是否允许移动剪裁框
+        resizable: true,  //是否允许改变裁剪框的大小
+        zoomable: true,  //是否允许缩放图片大小
+        mouseWheelZoom: true,  //是否允许通过鼠标滚轮来缩放图片
+        touchDragZoom: true,  //是否允许通过触摸移动来缩放图片
+        rotatable: true,  //是否允许旋转图片
+        crop: function (e) {
+            // 输出结果数据裁剪图像。
+        }
+    });
+    //旋转
+    $(".cropper-rotate-btn").on("click", function () {
+        $('#tailoringImg').cropper("rotate", 45);
+    });
+    //复位
+    $(".cropper-reset-btn").on("click", function () {
+        $('#tailoringImg').cropper("reset");
+    });
+    //换向
+    var flagX = true;
+    $(".cropper-scaleX-btn").on("click", function () {
+        if (flagX) {
+            $('#tailoringImg').cropper("scaleX", -1);
+            flagX = false;
+        } else {
+            $('#tailoringImg').cropper("scaleX", 1);
+            flagX = true;
+        }
+        flagX != flagX;
+    });
+
+    //裁剪后的处理
+    $("#sureCut").on("click", function () {
+        let index = layer.load(1, { shade: [0.1, '#000'] });
+        if ($("#tailoringImg").attr("src") == null) {
+            layer.closeAll();
+            return false;
+        } else {
+            var cas = $('#tailoringImg').cropper('getCroppedCanvas');//获取被裁剪后的canvas
+            var base64url = cas.toDataURL('image/png'); //转换为base64地址形式
+            var client_img_upurl = "{$Think.config.uploads_url}";
+            if (upload_img.hasClass("image_upload")) {
+                //上传图片
+                $.ajax({
+                    url: client_img_upurl,
+                    type: 'post',
+                    dataType: 'json',
+                    data: { base: base64url },
+                    success: function (resp) {
+                        if (resp.status == 'success') {
+                            //单图片上传
+                            upload_img.parent().parent().parent().prev().find(".image").attr('src', resp.showurl);
+                            upload_img.parent().parent().parent().prev().find(".image").attr('imgid', resp.id);
+                            upload_img.parent().find('.url').val(resp.url);
+                            upload_img.parent().find(".imageid").val(resp.id);
+                        }
+                        layer.closeAll();
+                    },
+                    error: function (e) {
+                        layer.closeAll();
+                        $.Huimodalalert('请求异常', 1500);
+                    }
+                });
+            } else {
+                var max_img_uploads_num = upload_img.attr('max_img_uploads_num');
+                var data_name_show_in = data_name_show;
+                if (data_name_show_in) {
+                    if ($("img." + data_name_show_in + "").length >= max_img_uploads_num) {
+                        layer.closeAll();
+                        $.Huimodalalert('上传图片超过' + max_img_uploads_num + '张，不能继续上传', 1500); return false;
+                    }
+                } else {
+                    if ($("img.images_add_list_element").length >= max_img_uploads_num) {
+                        layer.closeAll();
+                        $.Huimodalalert('上传图片超过' + max_img_uploads_num + '张，不能继续上传', 1500); return false;
+                    }
+                }
+                //上传图片
+                $.ajax({
+                    url: client_img_upurl,
+                    type: 'post',
+                    dataType: 'json',
+                    data: { img_name: '111.png', base: base64url, img_type: 'image/png' },
+                    success: function (resp) {
+                        if (resp.status == 'success') {
+                            //多图片上传
+                            var data_name_show_in = data_name_show;
+                            var img = document.createElement("img");
+                            var imagesListBox = upload_img.parent().parent().parent().prev().find('.images_list');
+                            if (data_name_show_in) {
+                                img.className = data_name_show_in + ' ' + 'thumbnail';
+                            } else {
+                                img.className = 'images_add_list_element thumbnail';
+                            }
+                            img.src = resp.showurl;
+                            img.setAttribute('onclick', 'remove_img(this)');
+                            img.setAttribute('imgid', resp.id);
+                            let scale = $('.images_upload').attr('scale');
+                            let scaleIndex = scale.indexOf('/');
+                            let w = scale.slice(0, scaleIndex);
+                            let h = scale.slice(scaleIndex + 1);
+                            img.setAttribute('style', 'width: ' + w + 'px;height: ' + h + 'px;');
+                            imagesListBox.append(img);
+                        }
+                        layer.closeAll();
+                    },
+                    error: function (e) {
+                        layer.closeAll();
+                        $.Huimodalalert('请求异常', 1500);
+                    }
+                });
+            }
+
+            //关闭裁剪框
+            closeTailor();
+        }
+    });
+    //关闭裁剪框
+    function closeTailor() {
+        $(".tailoring-container").toggle();
+    }
+    //删除图片
+    function remove_img(obj) {
+        layer.confirm('确定要删除该图片吗?', { btn: ['确定', '取消'] }, function () {
+            $(obj).remove();
+            layer.closeAll();
+        });
+    }
+</script>

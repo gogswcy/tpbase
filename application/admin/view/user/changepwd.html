@@ -1,0 +1,71 @@
+{extend name='template/empty'}
+{block name='body'}
+<article class="page-container">
+    <form method="POST" id="form" action="{:url('/admin/user/changepwd')}" class="form form-horizontal">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span style="color: red;">*</span>原密码</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="password" name="old" id="old" class="input-text">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>新密码：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="password" class="input-text" value="" placeholder="" id="new" name="new">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"></label>
+            <div class="formControls">
+                <button class="btn btn-success radius" type="submit">提交</button>
+                <button class="btn btn-default radius" type="button" onclick="layer_close()">关闭</button>
+            </div>
+        </div>
+    </form>
+</article>
+{/block}
+{block name='footer'}
+<script type="text/javascript" src="__PUBLIC__/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+{/block}
+{block name='script'}
+<script>
+    $("#form").validate({
+        rules: {
+            old: {
+                required: true,
+                minlength: 6,
+                maxlength: 15
+            },
+            new: {
+                required: true,
+                minlength: 6,
+                maxlength: 15
+            },
+        },
+        onkeyup: false,
+        focusCleanup: true,
+        success: "valid",
+        submitHandler: function (form) {
+            let index = layer.load(1, {shade:[0.1,'#000']});
+            $(form).ajaxSubmit(function (data) {
+                if (data.status === 'success') {
+                    layer.closeAll();
+                    $.Huimodalalert('修改成功', 1500);
+                    setTimeout(() => {
+                        var index = parent.layer.getFrameIndex(window.name);
+                        // parent.$('.btn-refresh').click();
+                        parent.layer.close(index);
+                    }, 1500);
+                } else {
+                    layer.closeAll();
+                    $.Huimodalalert(data.msg, 1500);
+                    return false;
+                }
+            });
+        }
+    });
+</script>
+{/block}

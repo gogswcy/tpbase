@@ -1,0 +1,9 @@
+<?php $noticeName = config('notice_name'); ?>
+{if $Think.session.noticeName}
+{volist name="$Think.session.noticeName.success" id="vo"}
+<div class="Huialert Huialert-success"><i class="Hui-iconfont">&#xe6a6;</i>{$vo}</div>
+{/volist}
+{volist name="$Think.session.noticeName.error" id="vo"}
+<div class="Huialert Huialert-danger"><i class="Hui-iconfont">&#xe6a6;</i>{$vo}</div>
+{/volist}
+{/if}

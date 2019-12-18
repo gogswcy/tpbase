@@ -1,0 +1,63 @@
+{extend name='template/empty'}
+{block name='body'}
+<div class="page-container">
+    <div class="text-l">
+        <input type="text" name="name" id="name" class="input-text radius" style="width: 135px;" placeholder="操作者" value="{$Think.request.name}">
+        <input type="text" name="action" id="action" class="input-text radius" style="width: 135px;" placeholder="操作版块" value="{$Think.request.action}">
+        日期范围：
+        <input type="date" id="datemin" class="input-text radius" style="width:135px;" value="{$Think.request.datemin}">
+        -
+        <input type="date" id="datemax" class="input-text radius" style="width:135px;" value="{$Think.request.datemax}">
+        <button type="submit" class="btn btn-success radius" id="search" name="">
+            搜索
+        </button>
+        <button class="btn btn-default radius" id="reset">
+            清空搜索
+        </button>
+    </div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-hover table-bg table-sort radius">
+            <thead>
+                <tr class="text-c">
+                    <th>序号</th>
+                    <th>操作者</th>
+                    <th>操作版块</th>
+                    <th>操作时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                {volist name='logs' id='vo' key='k'}
+                <tr class="text-c">
+                    <td>
+                        {if $Think.request.page}
+                        {$k + ($Think.request.page-1)*$pageSize}
+                        {else}
+                        {$k}
+                        {/if}
+                    </td>
+                    <td>{$vo.name}</td>
+                    <td>{$vo.action}</td>
+                    <td>{$vo.create_time|date='Y-m-d H:i:s'}</td>
+                </tr>
+                {/volist}
+            </tbody>
+        </table>
+        {$logs|raw}
+    </div>
+</div>
+{/block}
+{block name='script'}
+<script>
+    $('#search').click(function () {
+        let name = $('#name').val();
+        let action = $('#action').val();
+        let datemin = $('#datemin').val();
+        let datemax = $('#datemax').val();
+        
+        window.location.href = "{:url('/admin/log/index')}" + '?name=' + name + '&action=' + action + '&datemin=' + datemin + '&datemax=' + datemax;
+    });
+    $('#reset').click(function () {
+        window.location.href = "{:url('/admin/log/index')}";
+    });
+</script>
+{/block}

@@ -35,6 +35,6 @@ return [
     'tpl_replace_string' => [
         '__STATIC__'=>'',
         '__JS__' => '',
-        '__PUBLIC__' => '/tp5.1.37/public',
+        '__PUBLIC__' => '/tpbase/public',
     ]
 ];

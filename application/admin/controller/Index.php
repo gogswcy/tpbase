@@ -51,16 +51,7 @@ class Index extends Controller
             else
                 $showurl = '/' . $imageSrc;
 
-            $images = new Images();
-            $images->url = '/' . $imageSrc;
-            $images->status = 0;
-            $images->create_time = time();
-            $res = $images->save();
-            if (!$res) {
-                unlink($imageSrc);
-                return json(['status' => 'error']);
-            }
-            return array('status' => 'success', 'url' => '/' . $imageSrc, 'showurl' => $showurl, 'id' => $images['id']);
+            return array('status' => 'success', 'url' => '/' . $imageSrc, 'showurl' => $showurl);
         }
     }
 }

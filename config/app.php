@@ -75,7 +75,8 @@ return [
     // IP代理获取标识
     'http_agent_ip'          => 'X-REAL-IP',
     // URL伪静态后缀
-    'url_html_suffix'        => 'html',
+    // 'url_html_suffix'        => 'html',
+    'url_html_suffix'        => false,
     // URL普通方式参数 用于自动生成
     'url_common_param'       => false,
     // URL参数方式 0 按名称成对解析 1 按顺序解析
@@ -128,15 +129,18 @@ return [
     'show_error_msg'         => false,
     // 异常处理handle类 留空使用 \think\exception\Handle
     'exception_handle'       => '',
-
+    // 自定义http异常文件地址
+    'http_exception_template' => [
+        801 => Env::get('app_path') . '801.html',
+    ],
 
 
     // 二级目录的位置
-    'public' => '/tp5.1.37/public',
+    'public' => '/tpbse/public',
     // 上传图片保存的位置
     'upload_dir' => 'uploads/images/',
     // 上传图片的url
-    'upload_url' => '/tp5.1.37/public/index.php/admin/index/uploadimg',
+    'upload_url' => '/tpbase/public/index.php/admin/index/uploadimg',
 
     // 后台登录
     'admin_login' => 'admin_session',

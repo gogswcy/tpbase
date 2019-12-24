@@ -21,6 +21,9 @@ class CheckLogin
                 return $next($request);
             }
         }
+        $action = request()->method();
+        if ($action != 'GET')
+            return json(['status' => 'error', 'msg' => '登录超时, 请重新登录']);
         return redirect(url('/admin/login/index'));
     }
 }

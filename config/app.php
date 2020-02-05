@@ -141,6 +141,8 @@ return [
     'upload_dir' => 'uploads/images/',
     // 上传图片的url
     'upload_url' => '/tpbase/public/index.php/admin/index/uploadimg',
+    // 是否使用统一的公众号, 多个网站使用同一个公众号的情况下, token统一来保存
+    'wx_unite' => false,
 
     // 后台登录
     'admin_login' => 'admin_session',

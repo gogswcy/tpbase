@@ -141,8 +141,8 @@ return [
     'upload_dir' => 'uploads/images/',
     // 上传图片的url
     'upload_url' => '/tpbase/public/index.php/admin/index/uploadimg',
-    // 是否使用统一的公众号, 多个网站使用同一个公众号的情况下, token统一来保存
-    'wx_unite' => false,
+    // 是否使用统一的公众号, 多个网站使用同一个公众号的情况下, token统一来保存, true统一保存, 当前域名不能访问, false, 当前域名已配置
+    'wx_unite' => true,
 
     // 后台登录
     'admin_login' => 'admin_session',
@@ -154,18 +154,18 @@ return [
     // 微信的个人信息保存
     'wx_info' => '',
     // 微信登录
-    'wx_login' => '',
+    'wx_login' => 'tpbase_wx',
 
     // 微信appid
-    'wx_appid' => '',
+    'wx_appid' => 'wxc6fc137a31fa9ef6',
     // 微信secret
-    'wx_appsecret' => '',
+    'wx_appsecret' => '0b9561a145b959edb15805a429ce0afe',
     // 商户号,key
     'wx_mchid' => '',
     'wx_key' => '',
     // 微信token,ticket保存位置
-    'wx_token' => '',
-    'wx_ticket' => '',
+    'wx_token' => '/www/wwwroot/salt.s2.qyingyong.com/',
+    'wx_ticket' => '/www/wwwroot/salt.s2.qyingyong.com/',
 
     // 小程序appid
     'appid' => '',

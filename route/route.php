@@ -23,3 +23,5 @@ Route::group('', function () {
 Route::get('/admin/login/index', 'admin/Login/index');
 Route::post('/admin/login/login', 'admin/Login/login');
 Route::get('/admin/login/logout', 'admin/Login/logout');
+
+Route::controller('/test', 'index/Index');

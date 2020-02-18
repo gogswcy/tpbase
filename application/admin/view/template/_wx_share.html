@@ -1,0 +1,76 @@
+<script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+<script type="text/javascript">
+    var title = '{$wx.wx_share_title}';
+    var desc = '{$wx.wx_share_desc}';
+    var img = '{$wx.wx_share_thumb}';
+    var linkurl = '{$wx.wx_share_linkurl}';
+    wx.config({
+        debug: false,
+        appId: '{$wx.appId}',
+        timestamp: '{$wx.timestamp}',
+        nonceStr: '{$nonceStr}',
+        signature: '{$wx.signature}',
+        jsApiList: [
+            'hideMenuItems',
+            'scanQRCode',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'openLocation'
+        ]
+    });
+    wx.ready(function () {
+        //批量隐藏菜单项
+        wx.hideMenuItems({
+            menuList: [
+                'menuItem:copyUrl',// 复制链接
+                'menuItem:openWithQQBrowser',//在浏览器中打开
+                'menuItem:share:email',
+                'menuItem:openWithSafari',
+                'menuItem:share:qq'
+            ]
+        });
+    });
+    wx.ready(function () {
+        // 发送给好友
+        wx.onMenuShareAppMessage({
+            title: title,
+            desc: desc,
+            link: linkurl,
+            imgUrl: img,
+            fail: function (res) {
+                alert(JSON.stringify(res));
+            }
+        });
+        // 分享到朋友圈
+        wx.onMenuShareTimeline({
+            title: title,
+            link: linkurl,
+            imgUrl: img,
+            fail: function (res) {
+                alert(JSON.stringify(res));
+            }
+        });
+        //分享到QQ
+        wx.onMenuShareQQ({
+            title: title,
+            desc: desc,
+            link: linkurl,
+            imgUrl: img,
+            fail: function (res) {
+                alert(JSON.stringify(res));
+            }
+        });
+        // 分享到微博
+        wx.onMenuShareWeibo({
+            title: title,
+            desc: desc,
+            link: linkurl,
+            imgUrl: img,
+            fail: function (res) {
+                alert(JSON.stringify(res));
+            }
+        });
+    });
+</script>

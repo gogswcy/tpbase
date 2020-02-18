@@ -10,9 +10,9 @@ class Jssdk
     public function __construct()
     {
         $this->appid = config('wx_appid');
-        $this->appsecret = config('wx_secret');
-        $this->tokenPath = config('wx_tokenPath');
-        $this->ticketPath = config('wx_ticketPath');
+        $this->appsecret = config('wx_appsecret');
+        $this->tokenPath = config('wx_token') . config('wx_appid') . 'access_token.json';
+        $this->ticketPath = config('wx_ticket') . config('wx_appid') . 'jsapi_ticket.json';
     }
 
     /**
@@ -27,7 +27,8 @@ class Jssdk
         //jsapi_ticket是公众号用于调用微信JS接口的临时票据。正常情况下，jsapi_ticket的有效期为7200秒，通过access_token来获取。
         $wx['jsapi_ticket'] = $this->actionTicket();
         //分享的地址，注意：这里是指当前网页的URL，不包含#及其后面部分
-        $wx['url'] = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+        $wx['url'] = $http . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         $string = sprintf("jsapi_ticket=%s&noncestr=%s&timestamp=%s&url=%s", $wx['jsapi_ticket'], $wx['nonceStr'], $wx['timestamp'], $wx['url']);
         //生成签名
         $wx['signature'] = sha1($string);
@@ -89,12 +90,13 @@ class Jssdk
                 if (config('public')) {
                     $redirect_uri = request()->domain() . $_SERVER['PHP_SELF'];
                 } else {
-                    $redirect_uri = request()->domain();
+                    $redirect_uri = request()->domain() . $_SERVER['PATH_INFO'];
                 }
                 $callback = 'http://salt.s2.qyingyong.com/get-weixin-code.html?appid=' . $this->appid . '&scope=snsapi_userinfo&state=STATE&' . 'redirect_uri=' . $redirect_uri;
             } else {
                 //微信服务器回调url，这里是本页url
-                $callback = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                $http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+                $callback = $http . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
             }
             $this->getCode($callback);
         } else {
@@ -102,6 +104,15 @@ class Jssdk
             $code = $_GET['code'];
             //获取网页授权access_token和用户openid
             $data = $this->getAccessToken($code);
+            if (isset($data['errcode'])) {
+                if ($data['errcode'] == 40163) {
+                    $redirect_url = request()->domain() . config('public') . $_SERVER["PHP_SELF"];
+                    return redirect($redirect_url);
+                } else {
+                    echo 'errcode: ' . $data['errcode'] . '<br>' . 'errmsg:' . $data['errmsg'];
+                    return;
+                }
+            }
             //获取微信用户信息      
             $data_all = $this->getUserInfo($data['access_token'], $data['openid']);
             return $data_all;
@@ -133,10 +144,7 @@ class Jssdk
         $appsecret = $this->appsecret;
         $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $appid . '&secret=' . $appsecret . '&code=' . $code . '&grant_type=authorization_code';
         $user = json_decode(file_get_contents($url));
-        if (isset($user->errcode)) {
-            echo 'error:' . $user->errcode . '<hr>msg  :' . $user->errmsg;
-            exit;
-        }
+
         //返回的json数组转换成array数组
         $data = json_decode(json_encode($user), true);
         return $data;

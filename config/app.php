@@ -136,7 +136,7 @@ return [
 
 
     // 二级目录的位置
-    'public' => '/tpbse/public',
+    'public' => '/tpbase/public',
     // 上传图片保存的位置
     'upload_dir' => 'uploads/images/',
     // 上传图片的url

@@ -7,7 +7,7 @@ use think\Controller;
 class Index extends Controller
 {
     protected $middleware = [
-        'CheckWechatLogin' => ['except' => []],
+        'CheckWechatLogin' => ['except' => ['_empty']],
     ];
 
     public function _empty()
@@ -20,5 +20,10 @@ class Index extends Controller
         $sdk = new Jssdk();
         $wx = $sdk->info();
         return view('index/index', ['wx' => $wx]);
+    }
+
+    public function getPic()
+    {
+        return view('index/pictest');
     }
 }

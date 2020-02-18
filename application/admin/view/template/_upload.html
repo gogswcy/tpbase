@@ -1,8 +1,14 @@
 <!-- 
+    data_scale 裁减的比例
+
     image_upload 上传单张图片
+    show_position 单图上传的时候, 指定要显示的图片的image类名
+    store_position 单图上传的时候, 指定要保存到的input类名
+
     images_upload 上传多张图片
     max_img_uploads_num 最大上传的图片数量
-    
+    show_list 生成新图片的位置的类名
+    scale 多图上传, 新图片的比例  例:4/3
 -->
 <!--图片裁剪框 start-->
 <div style="display: none" class="tailoring-container">
@@ -168,7 +174,9 @@
         } else {
             var cas = $('#tailoringImg').cropper('getCroppedCanvas');//获取被裁剪后的canvas
             var base64url = cas.toDataURL('image/png'); //转换为base64地址形式
-            var client_img_upurl = "{$Think.config.uploads_url}";
+            var client_img_upurl = "{$Think.config.upload_url}";
+            var showPosition = '.' + upload_img.attr('show_position');
+            var storePosition = '.' + upload_img.attr('store_position');
             if (upload_img.hasClass("image_upload")) {
                 //上传图片
                 $.ajax({
@@ -179,10 +187,8 @@
                     success: function (resp) {
                         if (resp.status == 'success') {
                             //单图片上传
-                            upload_img.parent().parent().parent().prev().find(".image").attr('src', resp.showurl);
-                            // upload_img.parent().parent().parent().prev().find(".image").attr('imgid', resp.id);
-                            upload_img.parent().find('.url').val(resp.url);
-                            // upload_img.parent().find(".imageid").val(resp.id);
+                            $(showPosition).attr('src', resp.showurl);
+                            $(storePosition).val(resp.url);
                         }
                         layer.closeAll();
                     },
@@ -205,6 +211,7 @@
                         $.Huimodalalert('上传图片超过' + max_img_uploads_num + '张，不能继续上传', 1500); return false;
                     }
                 }
+                var showList = '.' + upload_img.attr('show_list');
                 //上传图片
                 $.ajax({
                     url: client_img_upurl,
@@ -216,7 +223,7 @@
                             //多图片上传
                             var data_name_show_in = data_name_show;
                             var img = document.createElement("img");
-                            var imagesListBox = upload_img.parent().parent().parent().prev().find('.images_list');
+                            var imagesListBox = $(showList);
                             if (data_name_show_in) {
                                 img.className = data_name_show_in + ' ' + 'thumbnail';
                             } else {

@@ -151,6 +151,9 @@ return [
     // 用于提示的闪存名称
     'notice_name' => 'notice_name',
 
+    // 手机端登录
+    'mobile_login' => 'mobile_login',
+
     // 微信的个人信息保存
     'wx_info' => '',
     // 微信登录

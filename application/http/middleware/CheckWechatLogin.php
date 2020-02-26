@@ -16,14 +16,13 @@ class CheckWechatLogin
     {
         $wx_login = "?".$this->session_name;
         if (session($wx_login)) {
-            halt($request);
             return $next($request);
         } else {
             $sdk = new Jssdk();
-            $wechat = $sdk->getUserAll();
+            $wechat = $sdk->getInfo();
             if (!$wechat)
                 abort(404);
-            session($wx_login, $wechat);
+            session($this->session_name, $wechat);
             return $next($request);
         }
     }

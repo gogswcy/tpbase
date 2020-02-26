@@ -170,6 +170,11 @@ return [
     'wx_token' => '/www/wwwroot/salt.s2.qyingyong.com/',
     'wx_ticket' => '/www/wwwroot/salt.s2.qyingyong.com/',
 
+    // 百度文字识别
+    'bd_ocr_key' => '',
+    'bd_ocr_secret' => '',
+    'bd_ocr_path' => '',
+
     // 小程序appid
     'appid' => '',
     // 小程序scret
@@ -184,4 +189,5 @@ return [
     // 短信宝
     'sms_user' => '',
     'sms_pwd' => '',
+    'sms_session' => 'chakanbao_sms',
 ];

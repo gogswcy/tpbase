@@ -107,7 +107,7 @@ class Jssdk
             if (isset($data['errcode'])) {
                 if ($data['errcode'] == 40163) {
                     $redirect_url = request()->domain() . config('public') . $_SERVER["PHP_SELF"];
-                    return redirect($redirect_url);
+                    return ['status_' => 1];
                 } else {
                     echo 'errcode: ' . $data['errcode'] . '<br>' . 'errmsg:' . $data['errmsg'];
                     return;
@@ -166,6 +166,30 @@ class Jssdk
         }
         //返回的json数组转换成array数组
         $data = json_decode(json_encode($user), true);
+        return $data;
+    }
+
+    /**
+     * 判断是否登录
+     */
+    public function getInfo()
+    {
+        $data = $this->getUserAll();
+        if (isset($data['status_'])) {
+            if (config('wx_unite')) {
+                if (config('public')) {
+                    $redirect_uri = request()->domain() . $_SERVER['PHP_SELF'];
+                } else {
+                    $redirect_uri = request()->domain() . $_SERVER['PATH_INFO'];
+                }
+                $callback = 'http://salt.s2.qyingyong.com/get-weixin-code.html?appid=' . $this->appid . '&scope=snsapi_userinfo&state=STATE&' . 'redirect_uri=' . $redirect_uri;
+            } else {
+                //微信服务器回调url，这里是本页url
+                $http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+                $callback = $http . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+            }
+            $this->getCode($callback);
+        }
         return $data;
     }
 }

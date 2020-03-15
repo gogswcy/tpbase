@@ -46,7 +46,14 @@ class Jssdk
         $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" . $this->actionAccessToken() . "&type=jsapi";
         $info = file_get_contents($url);
         $info = json_decode($info, 1);
+        if (isset($info['errcode'])) {
+            $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" . $this->actionAccessToken(false) . "&type=jsapi";
+            $info = file_get_contents($url);
+            $info = json_decode($info, 1);
+        }
         if ($info) {
+            if (isset($info['errcode']))
+                die($info['errcode'].'<br>');
             $info['expire_time'] = time() + $info['expires_in'];
             $info['jsapi_ticket'] = $info['ticket'];
             file_put_contents($this->ticketPath, json_encode($info));

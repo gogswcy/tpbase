@@ -13,6 +13,7 @@ class Jssdk
         $this->appsecret = config('wx_appsecret');
         $this->tokenPath = config('wx_token') . config('wx_appid') . 'access_token.json';
         $this->ticketPath = config('wx_ticket') . config('wx_appid') . 'jsapi_ticket.json';
+        $this->redirect_url = config('wx_redirect');
     }
 
     /**
@@ -97,9 +98,9 @@ class Jssdk
                 if (config('public')) {
                     $redirect_uri = request()->domain() . $_SERVER['PHP_SELF'];
                 } else {
-                    $redirect_uri = request()->domain() . $_SERVER['PATH_INFO'];
+                    $redirect_uri = request()->domain() . $_SERVER['REQUEST_URI'];
                 }
-                $callback = 'http://salt.s2.qyingyong.com/get-weixin-code.html?appid=' . $this->appid . '&scope=snsapi_userinfo&state=STATE&' . 'redirect_uri=' . $redirect_uri;
+                $callback = $this->redirect_url . '?appid=' . $this->appid . '&scope=snsapi_userinfo&state=STATE&' . 'redirect_uri=' . $redirect_uri;
             } else {
                 //微信服务器回调url，这里是本页url
                 $http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
@@ -189,7 +190,7 @@ class Jssdk
                 } else {
                     $redirect_uri = request()->domain() . $_SERVER['PATH_INFO'];
                 }
-                $callback = 'http://salt.s2.qyingyong.com/get-weixin-code.html?appid=' . $this->appid . '&scope=snsapi_userinfo&state=STATE&' . 'redirect_uri=' . $redirect_uri;
+                $callback = $this->redirect_url . '?appid=' . $this->appid . '&scope=snsapi_userinfo&state=STATE&' . 'redirect_uri=' . $redirect_uri;
             } else {
                 //微信服务器回调url，这里是本页url
                 $http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';

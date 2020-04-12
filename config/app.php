@@ -169,6 +169,8 @@ return [
     // 微信token,ticket保存位置
     'wx_token' => '/www/wwwroot/salt.s2.qyingyong.com/',
     'wx_ticket' => '/www/wwwroot/salt.s2.qyingyong.com/',
+    // 获取网页授权跳转中系
+    'wx_redirect' => 'http://salt.s2.qyingyong.com/get-weixin-code.html',
 
     // 百度文字识别
     'bd_ocr_key' => '',

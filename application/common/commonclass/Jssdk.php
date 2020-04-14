@@ -54,7 +54,7 @@ class Jssdk
         }
         if ($info) {
             if (isset($info['errcode']))
-                die($info['errcode'].'<br>');
+                die($info['errcode'] . '<br>');
             $info['expire_time'] = time() + $info['expires_in'];
             $info['jsapi_ticket'] = $info['ticket'];
             file_put_contents($this->ticketPath, json_encode($info));
@@ -188,7 +188,7 @@ class Jssdk
                 if (config('public')) {
                     $redirect_uri = request()->domain() . $_SERVER['PHP_SELF'];
                 } else {
-                    $redirect_uri = request()->domain() . $_SERVER['PATH_INFO'];
+                    $redirect_uri = request()->domain() . $_SERVER['REQUEST_URI'];
                 }
                 $callback = $this->redirect_url . '?appid=' . $this->appid . '&scope=snsapi_userinfo&state=STATE&' . 'redirect_uri=' . $redirect_uri;
             } else {

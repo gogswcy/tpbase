@@ -98,7 +98,26 @@ class BaiduOcr
         $res['status'] = 'success';
         return $res;
     }
-
+    /**
+     * 银行卡识别
+     */
+    public function bankCard($data)
+    {
+        $data = preg_replace('/^(.*?,)/', '', $data);
+        $token = $this->getToken();
+        $url = 'https://aip.baidubce.com/rest/2.0/ocr/v1/bankcard?access_token='.$token
+        $data = [
+            'image' => $data,
+            'detect_directioni' => 'false',
+        ];
+        $res = $this->curlPost($url, $data);
+        $res = json_decode($res, 1);
+        if (isset($res['error_code'])) {
+            return ['status' => 'error', 'msg' => $res['error_msg']];
+        }
+        $res['status'] = 'success';
+        return $res;
+    }
     public function curlPost($url, $data)
     {
         $headerArray = array("Content-type:application/x-www-form-urlencoded;charset='utf-8'");

@@ -32,7 +32,7 @@ class Index extends Controller
         } else {
             $image = $base;
         }
-        $path = config('upload_dir');
+        $path = config('upload_dir') ?? 'uploads/images/';
         $path = $path . date("Ymd", time());
 
         //判断目录是否存在 不存在就创建

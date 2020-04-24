@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use app\common\model\Menus;
 use think\Controller;
 use think\Request;
 
@@ -11,6 +12,18 @@ class Index extends Controller
     {
         $sessionName = config('admin_login');
         $session = session($sessionName);
+        $menus = Menus::order('sort desc')
+            ->where('pid', 0)
+            ->select()
+            ->each(function ($item, $key) {
+                $item->subcate = Menus::where('pid', $item->id)
+                    ->order('sort desc')
+                    ->select()
+                    ->each(function ($item, $key) {
+                        $item->action = url($item->action);
+                    });
+            });
+        $this->assign('menus', $menus);
         return view('index/index', ['session' => $session]);
     }
 

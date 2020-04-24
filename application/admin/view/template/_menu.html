@@ -1,13 +1,17 @@
 <aside class="Hui-aside">
+	{volist name='menus' id='vo'}
 	<div class="menu_dropdown bk_2">
 		<dl>
-			<dt>日志管理 <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dt>{$vo.name} <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a data-href="{:url('/admin/log/index')}" data-title="日志管理" href="javascript:void(0)">日志管理</a></li>
+					{volist name='vo.subcate' id='vv'}
+					<li><a data-href="{$vv.action}" data-title="{$vv.name}" href="javascript:void(0)">{$vv.name}</a></li>
+					{/volist}
 				</ul>
 			</dd>
 		</dl>
 	</div>
+	{/volist}
 </aside>
 <div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>

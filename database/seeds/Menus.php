@@ -2,7 +2,7 @@
 
 use think\migration\Seeder;
 
-class User extends Seeder
+class Menus extends Seeder
 {
     /**
      * Run Method.
@@ -14,18 +14,14 @@ class User extends Seeder
      */
     public function run()
     {
-        $exist = db('user')
-            ->where('account', 'admin')
+        $exist = db('menus')
             ->find();
         if ($exist)
             return;
         $data = [
-            'account' => 'admin',
-            'name' => 'admin',
-            'password' => '96e79218965eb72c92a549dd5a330112',
-            'create_time' => 1575250175,
-            'delete_time' => 0
+            ['name' => '日志管理', 'action' => '', 'pid' => 0],
+            ['name' => '日志列表', 'action' => '/admin/logs/index', 'pid' => 1],
         ];
-        $this->table('user')->insert($data)->save();
+        $this->table('menus')->insert($data)->save();
     }
 }

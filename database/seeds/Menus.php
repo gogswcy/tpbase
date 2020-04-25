@@ -1,5 +1,6 @@
 <?php
 
+use think\Db;
 use think\migration\Seeder;
 
 class Menus extends Seeder
@@ -14,13 +15,12 @@ class Menus extends Seeder
      */
     public function run()
     {
-        $exist = db('menus')
-            ->find();
-        if ($exist)
-            return;
+        Db::query('truncate table menus');
         $data = [
-            ['name' => '日志管理', 'action' => '', 'pid' => 0],
-            ['name' => '日志列表', 'action' => '/admin/logs/index', 'pid' => 1],
+            ['id' => 1, 'name' => '通用', 'pid' => 0, 'action' => ''],
+            ['id' => 2, 'name' => '通用', 'pid' => 1, 'action' => '/admin/common/index'],
+            ['id' => 3, 'name' => '日志管理', 'action' => '', 'pid' => 0],
+            ['id' => 4, 'name' => '日志列表', 'action' => '/admin/log/index', 'pid' => 3],
         ];
         $this->table('menus')->insert($data)->save();
     }

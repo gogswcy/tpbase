@@ -19,6 +19,9 @@ Route::group('', function () {
     Route::post('/admin/user/changepwd', 'admin/Admin/changePwd');
 })->middleware('CheckLogin');
 
+// 后台公用控制器
+Route::controller('/admin/common', 'admin/CommonController');
+
 // 登录
 Route::get('/admin/login/index', 'admin/Login/index');
 Route::post('/admin/login/login', 'admin/Login/login');
